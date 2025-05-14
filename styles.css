@@ -1,0 +1,126 @@
+/* Custom styles for Healthy Meal Planner */
+
+/* Smooth transitions */
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Custom styling for the image preview */
+#image-preview-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+#image-preview {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Custom nutrition info cards */
+.nutrition-card {
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.nutrition-card .label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+}
+
+.nutrition-card .value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Meal section styles */
+.meal-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.meal-items {
+    background-color: #fff;
+    min-height: 3rem;
+}
+
+/* Food preview styles */
+#food-preview {
+    min-height: 16rem;
+}
+
+#food-preview-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#food-preview-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Tab styles */
+#basic-tab.active, #ai-tab.active {
+    border-bottom-color: #059669;
+    color: #059669;
+}
+
+/* Remove button animation */
+.remove-food-btn {
+    transition: all 0.2s ease;
+}
+
+.remove-food-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Pulse animation for loading state */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Daily summary styles */
+#total-calories, #total-protein, #total-carbs, #total-fat {
+    transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    #nutrition-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .meal-section h3 {
+        font-size: 1rem;
+    }
+    
+    #food-preview {
+        min-height: 12rem;
+    }
+} 

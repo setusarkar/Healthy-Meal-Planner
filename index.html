@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Meal Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-green-600">Healthy Meal Planner</h1>
+            <p class="text-gray-600 mt-2">Plan your meals and track your calories</p>
+        </header>
+        
+        <main class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+            <!-- Tabs for Basic vs AI Upload -->
+            <div class="mb-6 border-b border-gray-200">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="mr-2">
+                        <button id="basic-tab" class="inline-block p-4 border-b-2 border-green-600 rounded-t-lg active text-green-600" aria-current="page">Basic Meal Planner</button>
+                    </li>
+                    <li class="mr-2">
+                        <button id="ai-tab" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">AI Image Analysis</button>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Basic Meal Planner Section -->
+            <div id="basic-planner" class="mb-10">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Add Food to Your Meal Plan</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Add Food Form -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <form id="add-food-form">
+                            <div class="mb-4">
+                                <label for="meal-type" class="block text-sm font-medium text-gray-700 mb-1">Meal</label>
+                                <select id="meal-type" class="block w-full p-2 border border-gray-300 rounded-md">
+                                    <option value="breakfast">Breakfast</option>
+                                    <option value="lunch">Lunch</option>
+                                    <option value="dinner">Dinner</option>
+                                    <option value="snack">Snack</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="food-select" class="block text-sm font-medium text-gray-700 mb-1">Food Item</label>
+                                <select id="food-select" class="block w-full p-2 border border-gray-300 rounded-md">
+                                    <option value="">Select a food item</option>
+                                    <!-- Food options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="food-quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                                <input type="number" id="food-quantity" min="1" value="1" class="block w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md">
+                                Add to Meal Plan
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Food Preview -->
+                    <div id="food-preview" class="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center text-center">
+                        <div id="food-preview-placeholder" class="text-gray-400">
+                            <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                            </svg>
+                            <p class="mt-2">Select a food item to preview</p>
+                        </div>
+                        <div id="food-preview-content" class="hidden w-full">
+                            <img id="food-image" class="mx-auto h-32 object-cover rounded-lg mb-3" src="" alt="Food Image">
+                            <h3 id="food-name-preview" class="text-lg font-semibold"></h3>
+                            <p id="food-calories-preview" class="text-md"></p>
+                            <div id="food-nutrients-preview" class="grid grid-cols-2 gap-2 mt-2 text-sm"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Daily Meal Plan -->
+                <div class="mt-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Your Daily Meal Plan</h2>
+                        <div class="flex space-x-2">
+                            <button id="clear-plan" class="bg-red-600 hover:bg-red-700 text-white text-sm py-1 px-3 rounded-md">
+                                Clear Plan
+                            </button>
+                            <button id="save-plan" class="bg-blue-600 hover:bg-blue-700 text-white text-sm py-1 px-3 rounded-md">
+                                Save Plan
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Meal Sections -->
+                    <div class="space-y-4">
+                        <div id="breakfast-section" class="meal-section">
+                            <h3 class="font-medium text-lg text-gray-700 bg-gray-100 p-2 rounded-t-lg">Breakfast</h3>
+                            <ul id="breakfast-items" class="meal-items divide-y divide-gray-100">
+                                <li class="p-3 text-gray-400 italic">No breakfast items added yet</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="lunch-section" class="meal-section">
+                            <h3 class="font-medium text-lg text-gray-700 bg-gray-100 p-2 rounded-t-lg">Lunch</h3>
+                            <ul id="lunch-items" class="meal-items divide-y divide-gray-100">
+                                <li class="p-3 text-gray-400 italic">No lunch items added yet</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="dinner-section" class="meal-section">
+                            <h3 class="font-medium text-lg text-gray-700 bg-gray-100 p-2 rounded-t-lg">Dinner</h3>
+                            <ul id="dinner-items" class="meal-items divide-y divide-gray-100">
+                                <li class="p-3 text-gray-400 italic">No dinner items added yet</li>
+                            </ul>
+                        </div>
+                        
+                        <div id="snack-section" class="meal-section">
+                            <h3 class="font-medium text-lg text-gray-700 bg-gray-100 p-2 rounded-t-lg">Snacks</h3>
+                            <ul id="snack-items" class="meal-items divide-y divide-gray-100">
+                                <li class="p-3 text-gray-400 italic">No snack items added yet</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Daily Summary -->
+                    <div class="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                        <h3 class="font-medium text-lg text-green-800 mb-2">Daily Summary</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <p class="text-sm text-gray-500">Total Calories</p>
+                                <p id="total-calories" class="text-xl font-bold text-green-600">0 kcal</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <p class="text-sm text-gray-500">Protein</p>
+                                <p id="total-protein" class="text-xl font-bold text-blue-600">0g</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <p class="text-sm text-gray-500">Carbs</p>
+                                <p id="total-carbs" class="text-xl font-bold text-yellow-600">0g</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg text-center shadow-sm">
+                                <p class="text-sm text-gray-500">Fat</p>
+                                <p id="total-fat" class="text-xl font-bold text-red-600">0g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Image Analysis Section -->
+            <div id="ai-analyzer" class="hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Analyze Food with AI</h2>
+                
+                <div class="mb-6">
+                    <div class="flex items-center justify-center w-full">
+                        <label for="image-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6" id="upload-prompt">
+                                <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                            </div>
+                            <div id="image-preview-container" class="hidden w-full h-full">
+                                <img id="image-preview" class="object-contain w-full h-full" src="#" alt="Food image preview">
+                            </div>
+                            <input id="image-upload" type="file" class="hidden" accept="image/png, image/jpeg" />
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <select id="ai-meal-type" class="p-2 border border-gray-300 rounded-md">
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                        <option value="snack">Snack</option>
+                    </select>
+                    
+                    <div>
+                        <button id="analyze-btn" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            Analyze Food
+                        </button>
+                        
+                        <button id="test-api-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 text-sm rounded-md ml-2">
+                            Test API
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="loading" class="hidden text-center my-6">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600"></div>
+                    <p class="mt-2 text-gray-600">Analyzing your food...</p>
+                </div>
+                
+                <div id="results" class="hidden mt-8 p-4 border border-gray-200 rounded-lg">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Results</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-md font-medium text-gray-700">Detected Food</h3>
+                            <p id="food-name" class="text-lg font-semibold mt-1">-</p>
+                        </div>
+                        <div>
+                            <h3 class="text-md font-medium text-gray-700">Calories</h3>
+                            <p id="calories" class="text-lg font-semibold mt-1">-</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-md font-medium text-gray-700">Nutrition Information</h3>
+                        <div id="nutrition-info" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                            <!-- Nutrition info will be populated here -->
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button id="add-to-plan-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md">
+                            Add to Meal Plan
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="error-message" class="hidden mt-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg"></div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="text-center mt-10 pb-6 text-gray-500 text-sm">
+        <p>© 2023 Healthy Meal Planner | Powered by Google Vision API & Nutritionix API</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html> 
